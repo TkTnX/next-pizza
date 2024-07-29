@@ -1,14 +1,14 @@
-import { cn } from '@/lib/utils'
-import React from 'react'
-import Categories from './categories';
-import SortPopup from './sort-popup';
-import { Container } from './container';
+import { cn } from "@/lib/utils";
+import React from "react";
+import Categories from "./categories";
+import SortPopup from "./sort-popup";
+import { Container } from "./container";
 
 interface Props {
-    className?: string
+  className?: string;
 }
 
-const TopBar:React.FC<Props> = ({className}) => {
+const TopBar: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
@@ -16,12 +16,12 @@ const TopBar:React.FC<Props> = ({className}) => {
         className
       )}
     >
-      <Container className='flex items-center justify-between'>
+      <Container className="flex items-center justify-between">
         <Categories />
         <SortPopup />
       </Container>
     </div>
   );
-}
+};
 
-export default TopBar
+export default TopBar;
