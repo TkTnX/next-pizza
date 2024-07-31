@@ -1,14 +1,12 @@
-import React from 'react'
-import { Title } from './title'
-import FilterCheckbox from './filterCheckbox';
-import { Input, RangeSlider, Slider } from '../ui';
-import FiltersIngredients from './filters-ingredients';
+import React from "react";
+import { Title } from "./title";
+import FilterCheckbox from "./filterCheckbox";
+import { Input, RangeSlider } from "../ui";
+import FiltersIngredients from "./filters-ingredients";
 
-type Props = { className?: string }
+type Props = { className?: string };
 
-
-
-export default function Filters({className}: Props) {
+export default function Filters({ className }: Props) {
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
