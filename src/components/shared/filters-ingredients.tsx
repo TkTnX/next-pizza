@@ -1,31 +1,52 @@
 "use client";
 import * as React from "react";
-import FilterCheckbox, { FilterCheckboxProps } from "./filterCheckbox";
-import { Input } from "../ui";
-
-type Item = FilterCheckboxProps;
+import FilterCheckbox  from "./filterCheckbox";
+import { Input, Skeleton } from "../ui";
+import { Api } from "@/services/api-client";
+import { Ingredient } from "@prisma/client";
 interface IFiltersIngredientsProps {
-  items: Item[];
-  defaultItems: Item[];
   limit?: number;
   searchInputPlaceholder?: string;
-  onChange?: (values: string[]) => void;
+  onClickCheckbox?: (id: string) => void;
   defaultValue?: string[];
   className?: string;
+  selectedIds: any;
+  name: string
 }
 
 const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
-  items,
-  defaultItems,
   limit = 5,
   searchInputPlaceholder = "Поиск...",
-  onChange,
+  onClickCheckbox,
   defaultValue,
-  className,
+  selectedIds,
+  name,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
   const [inpVal, setInpVal] = React.useState("");
-  const showAllList = showAll ? items : defaultItems?.slice(0, limit);
+  const [items, setItems] = React.useState<Ingredient[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const showAllList = showAll ? items : items.slice(0, limit);
+
+  React.useEffect(() => {
+    Api.ingredients.getAllIngredients().then(({ data }) => {
+      setItems(data);
+      setIsLoading(false);
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        {Array(limit)
+          .fill(0)
+          .map((_, index) => (
+            <Skeleton key={index} className="h-6 mb-5 w-full rounded-[8px]" />
+          ))}
+        <Skeleton className="w-28 h-6 mb-5  rounded-[8px]" />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -41,15 +62,17 @@ const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
       )}
       <div className="flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar">
         {showAllList
-          .filter((item) => item.text.toLowerCase().includes(inpVal.toLowerCase()))
-          .map((item, index) => (
+          .filter((item) =>
+            item.name.toLowerCase().includes(inpVal.toLowerCase())
+          )
+          .map((item) => (
             <FilterCheckbox
-              key={index}
-              text={item.text}
-              value={item.value}
-              endAdornment={item.endAdornment}
-              checked={false}
-              onCheckedChange={(ids) => console.log(ids)}
+              key={item.id}
+              text={item.name}
+              value={String(item.id)}
+              checked={selectedIds.has(String(item.id))}
+              onCheckedChange={() => onClickCheckbox?.(String(item.id))}
+              name={name}
             />
           ))}
       </div>

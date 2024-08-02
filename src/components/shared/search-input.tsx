@@ -2,9 +2,11 @@
 import * as React from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useClickAway } from "react-use";
+import { useClickAway, useDebounce } from "react-use";
 import Link from "next/link";
 import { Api } from "@/services/api-client";
+import { Product } from "@prisma/client";
+import Image from "next/image";
 
 interface ISearchInputProps {
   className?: string;
@@ -15,15 +17,29 @@ const SearchInput: React.FunctionComponent<ISearchInputProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [onFocus, setOnFocus] = React.useState(false);
+  const [products, setProducts] = React.useState<Product[]>([]);
   const ref = React.useRef(null);
   useClickAway(ref, () => {
     setOnFocus(false);
   });
 
-  React.useEffect(() => {
-    Api.products.search(searchQuery);
-  }, [searchQuery]);
+  useDebounce(
+    async () => {
+      try {
+        const { data } = await Api.products.search(searchQuery);
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    300,
+    [searchQuery]
+  );
 
+  const handleClickLink = () => {
+    setOnFocus(false);
+    setSearchQuery("");
+  };
   return (
     <>
       {onFocus && <div className="fixed inset-0 bg-black/50 z-30" />}
@@ -50,19 +66,28 @@ const SearchInput: React.FunctionComponent<ISearchInputProps> = ({
             onFocus && "visible opacity-100 top-12"
           )}
         >
-          <Link href={`/product/2`}>
-            <div className="px-3 py-2 hover:bg-primary/10 cursor-pointer flex items-center gap-1">
-              {/*  eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className="rounded-sm"
-                src="http://localhost:3000/_next/image?url=https%3A%2F%2Fmedia.dodostatic.net%2Fimage%2Fr%3A292x292%2F11EE7D610D2925109AB2E1C92CC5383C.avif&w=256&q=75"
-                width={32}
-                height={32}
-                alt="pizza 1"
-              />
-              <p>Пицца 1</p>
-            </div>
-          </Link>
+          {products.length > 0 ? (
+            products.map((item) => (
+              <Link
+                onClick={handleClickLink}
+                key={item.id}
+                href={`/product/${item.id}`}
+              >
+                <div className="px-3 py-2 hover:bg-primary/10 cursor-pointer flex items-center gap-1">
+                  <Image
+                    className="rounded-sm"
+                    src={item.imageUrl}
+                    width={32}
+                    height={32}
+                    alt={item.name}
+                  />
+                  <p>{item.name}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="px-3 py-2">По вашему запросу ничего не найдено</p>
+          )}
         </div>
       </div>
     </>

@@ -1,12 +1,15 @@
+"use client";
 import React from "react";
 import { Title } from "./title";
 import FilterCheckbox from "./filterCheckbox";
 import { Input, RangeSlider } from "../ui";
 import FiltersIngredients from "./filters-ingredients";
+import { useSet } from "react-use";
 
 type Props = { className?: string };
 
 export default function Filters({ className }: Props) {
+  const [selectedIds, { toggle }] = useSet(new Set<string>([]));
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
@@ -43,83 +46,10 @@ export default function Filters({ className }: Props) {
         <div className="mt-6 border-y border-y-neutral-100 py-6 pb-7">
           <p className="font-bold mb-3">Ингредиенты:</p>
           <FiltersIngredients
+            selectedIds={selectedIds}
+            name="ingredients"
             limit={6}
-            defaultItems={[
-              {
-                text: "Сырный соус",
-                value: "Сырный соус",
-              },
-              {
-                text: "Моцарелла",
-                value: "Моцарелла",
-              },
-              {
-                text: "Чеснок",
-                value: "Чеснок",
-              },
-              {
-                text: "Солённые огурчики",
-                value: "Солённые огурчики",
-              },
-              {
-                text: "Красный лук",
-                value: "Красный лук",
-              },
-              {
-                text: "Томаты",
-                value: "Томаты",
-              },
-            ]}
-            items={[
-              {
-                text: "Сырный соус",
-                value: "Сырный соус",
-              },
-              {
-                text: "Моцарелла",
-                value: "Моцарелла",
-              },
-              {
-                text: "Чеснок",
-                value: "Чеснок",
-              },
-              {
-                text: "Солённые огурчики",
-                value: "Солённые огурчики",
-              },
-              {
-                text: "Красный лук",
-                value: "Красный лук",
-              },
-              {
-                text: "Томаты",
-                value: "Томаты",
-              },
-              {
-                text: "Сырный соус",
-                value: "Сырный соус",
-              },
-              {
-                text: "Моцарелла",
-                value: "Моцарелла",
-              },
-              {
-                text: "Чеснок",
-                value: "Чеснок",
-              },
-              {
-                text: "Солённые огурчики",
-                value: "Солённые огурчики",
-              },
-              {
-                text: "Красный лук",
-                value: "Красный лук",
-              },
-              {
-                text: "Томаты",
-                value: "Томаты",
-              },
-            ]}
+            onClickCheckbox={(id) => toggle(id)}
           />
         </div>
       </div>

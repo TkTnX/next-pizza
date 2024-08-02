@@ -1,10 +1,9 @@
-import React from 'react'
-import { Checkbox } from '../ui';
+import React from "react";
+import { Checkbox, Skeleton } from "../ui";
 
 export type FilterCheckboxProps = {
   text: string;
-  value: string;
-  endAdornment?: React.ReactNode;
+  value?: string;
   onCheckedChange?: (checked: boolean) => void;
   checked?: boolean;
   name?: string;
@@ -13,11 +12,13 @@ export type FilterCheckboxProps = {
 export default function FilterCheckbox({
   text,
   value,
-  endAdornment,
   onCheckedChange,
   checked,
   name,
 }: FilterCheckboxProps) {
+
+ 
+
   return (
     <div className="flex items-center space-x-2">
       <Checkbox
@@ -33,7 +34,6 @@ export default function FilterCheckbox({
       >
         {text}
       </label>
-      {endAdornment}
     </div>
   );
 }
