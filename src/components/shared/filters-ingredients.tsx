@@ -67,6 +67,7 @@ const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
               checked={value.has(String(item.id) || item.value)}
               onCheckedChange={() => onClickCheckbox?.(String(item.id))}
               name={name}
+              
             />
           ))}
       </div>

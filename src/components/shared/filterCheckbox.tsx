@@ -2,15 +2,14 @@ import React from "react";
 import { Checkbox, Skeleton } from "../ui";
 
 export type FilterCheckboxProps = {
-  text?: string;
-  value?: string;
+  text: string;
+  value: string;
   onCheckedChange?: (checked: boolean) => void;
   checked: boolean;
-  name?: string;
+  name: string;
   className?: string;
   onClickCheckbox?: (id: string) => void;
   values?: string;
-  elements?: Record<string, any>[];
 };
 
 export default function FilterCheckbox({
