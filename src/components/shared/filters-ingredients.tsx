@@ -1,39 +1,33 @@
 "use client";
 import * as React from "react";
-import FilterCheckbox  from "./filterCheckbox";
+import FilterCheckbox from "./filterCheckbox";
 import { Input, Skeleton } from "../ui";
-import { Api } from "@/services/api-client";
-import { Ingredient } from "@prisma/client";
 interface IFiltersIngredientsProps {
   limit?: number;
   searchInputPlaceholder?: string;
   onClickCheckbox?: (id: string) => void;
   defaultValue?: string[];
   className?: string;
-  selectedIds: any;
-  name: string
+  values: Record<string, any>;
+  name: string;
+  value: any;
+  isLoading?: boolean;
 }
 
 const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
   limit = 5,
   searchInputPlaceholder = "Поиск...",
   onClickCheckbox,
-  defaultValue,
-  selectedIds,
+  values,
   name,
+  isLoading,
+  value,
+  className
 }) => {
   const [showAll, setShowAll] = React.useState(false);
   const [inpVal, setInpVal] = React.useState("");
-  const [items, setItems] = React.useState<Ingredient[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const showAllList = showAll ? items : items.slice(0, limit);
 
-  React.useEffect(() => {
-    Api.ingredients.getAllIngredients().then(({ data }) => {
-      setItems(data);
-      setIsLoading(false);
-    });
-  }, []);
+  const showAllList = showAll ? values : values.slice(0, limit);
 
   if (isLoading) {
     return (
@@ -49,7 +43,7 @@ const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
   }
 
   return (
-    <div>
+    <div className={className}>
       {showAll && (
         <div className="mb-5">
           <Input
@@ -62,21 +56,21 @@ const FiltersIngredients: React.FunctionComponent<IFiltersIngredientsProps> = ({
       )}
       <div className="flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar">
         {showAllList
-          .filter((item) =>
+          .filter((item: Record<string, any>) =>
             item.name.toLowerCase().includes(inpVal.toLowerCase())
           )
-          .map((item) => (
+          .map((item: Record<string, any>) => (
             <FilterCheckbox
-              key={item.id}
+              key={item.id || item.value}
               text={item.name}
               value={String(item.id)}
-              checked={selectedIds.has(String(item.id))}
+              checked={value.has(String(item.id) || item.value)}
               onCheckedChange={() => onClickCheckbox?.(String(item.id))}
               name={name}
             />
           ))}
       </div>
-      {items.length > limit && (
+      {values.length > limit && (
         <button
           onClick={() => setShowAll((prev) => !prev)}
           className={`text-primary text-base text-left mt-5 hover:opacity-80 w-full ${

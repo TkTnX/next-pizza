@@ -2,11 +2,15 @@ import React from "react";
 import { Checkbox, Skeleton } from "../ui";
 
 export type FilterCheckboxProps = {
-  text: string;
+  text?: string;
   value?: string;
   onCheckedChange?: (checked: boolean) => void;
-  checked?: boolean;
+  checked: boolean;
   name?: string;
+  className?: string;
+  onClickCheckbox?: (id: string) => void;
+  values?: string;
+  elements?: Record<string, any>[];
 };
 
 export default function FilterCheckbox({
@@ -16,9 +20,6 @@ export default function FilterCheckbox({
   checked,
   name,
 }: FilterCheckboxProps) {
-
- 
-
   return (
     <div className="flex items-center space-x-2">
       <Checkbox
