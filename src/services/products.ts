@@ -7,3 +7,7 @@ export const search = async (query: string) => {
     params: { query },
   });
 };
+
+export const getAllProducts = async () => {
+  return await axiosInstance.get<Product[]>(ApiRoutes.PRODUCTS);
+}

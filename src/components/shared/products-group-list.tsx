@@ -28,7 +28,7 @@ const ProductsGroupList: React.FunctionComponent<IProductsGroupListProps> = ({
 
   React.useEffect(() => {
     if (intersection?.isIntersecting) {
-        setActiveCategory(categoryId)
+      setActiveCategory(categoryId);
     }
   }, [categoryId, intersection?.isIntersecting, setActiveCategory, title]);
 
@@ -38,7 +38,15 @@ const ProductsGroupList: React.FunctionComponent<IProductsGroupListProps> = ({
 
       <div className={cn("grid grid-cols-3 gap-[50px]", listClassName)}>
         {products.map((item) => (
-          <ProductCard key={item.id} {...item} price={item.items[0].price} />
+          <ProductCard
+            key={item.id}
+            {...item}
+            price={
+              item.variants && item.variants.length > 0
+                ? item.variants[0].price
+                : null
+            }
+          />
         ))}
       </div>
     </div>
