@@ -1,4 +1,4 @@
-import ChooseProductModal from "@/components/shared/modals/choose-product-modal";
+import ChooseProductModal from "@/shared/components/shared/modals/choose-product-modal";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -13,7 +13,7 @@ const ProductModal = async ({ params: { id } }: { params: { id: string } }) => {
   });
 
   if (!product) {
-    return notFound()
+    return notFound();
   }
 
   return <ChooseProductModal product={product} />;

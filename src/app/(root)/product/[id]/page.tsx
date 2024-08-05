@@ -1,7 +1,7 @@
-import { Container } from "@/components/shared/container";
-import ProductImage from "@/components/shared/productImage";
-import { Title } from "@/components/shared/title";
-import VariantsSelector from "@/components/shared/variants-selector";
+import { Container } from "@/shared/components/shared/container";
+import ProductImage from "@/shared/components/shared/productImage";
+import { Title } from "@/shared/components/shared/title";
+import VariantsSelector from "@/shared/components/shared/variants-selector";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 import * as React from "react";
@@ -48,7 +48,8 @@ const ProductPage: React.FunctionComponent<IProductPageProps> = async ({
               },
               { name: "Средняя", value: "2" },
               { name: "Большая", value: "3" },
-            ]}          />
+            ]}
+          />
         </div>
       </div>
     </Container>

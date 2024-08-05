@@ -1,8 +1,8 @@
-import { Container } from "@/components/shared/container";
-import Filters from "@/components/shared/filters";
-import ProductsGroupList from "@/components/shared/products-group-list";
-import { Title } from "@/components/shared/title";
-import TopBar from "@/components/shared/top-bar";
+import { Container } from "@/shared/components/shared/container";
+import Filters from "@/shared/components/shared/filters";
+import ProductsGroupList from "@/shared/components/shared/products-group-list";
+import { Title } from "@/shared/components/shared/title";
+import TopBar from "@/shared/components/shared/top-bar";
 import { prisma } from "@/prisma/prisma-client";
 
 export default async function Home() {
@@ -23,7 +23,11 @@ export default async function Home() {
         <Title text="Все пиццы" size="lg" className="font-extrabold" />
       </Container>
 
-      <TopBar categories={categories.filter(category => category.products.length > 0)} />
+      <TopBar
+        categories={categories.filter(
+          (category) => category.products.length > 0
+        )}
+      />
 
       <Container className="pb-14 mt-10 flex justify-between gap-16">
         {/* Фильтрация */}

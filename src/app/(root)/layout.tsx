@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Header from "@/components/shared/header";
+import Header from "@/shared/components/shared/header";
 
 export const metadata: Metadata = {
   title: "Next Pizza | Главная",
@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal
+  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode
+  modal: React.ReactNode;
 }>) {
   return (
     <>
