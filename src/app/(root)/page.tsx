@@ -38,6 +38,7 @@ export default async function Home() {
               (category) =>
                 category.products.length > 0 && (
                   <ProductsGroupList
+                    className="scroll-m-24"
                     key={category.id}
                     title={category.name}
                     products={category.products}

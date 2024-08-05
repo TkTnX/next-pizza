@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import * as React from "react";
 
 interface IProductPageProps {
-  id: string;
   params: {
     id: string;
   };

@@ -6,8 +6,8 @@ import * as React from "react";
 interface IProductImageProps {
   src: string;
   alt: string;
-  className: string;
-  size: number;
+  className?: string;
+  size: 20 | 30 | 40;
 }
 
 const ProductImage: React.FunctionComponent<IProductImageProps> = ({
