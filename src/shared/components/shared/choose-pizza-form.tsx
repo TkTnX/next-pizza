@@ -6,24 +6,23 @@ import { Title } from "./title";
 import { Button } from "../ui";
 import VariantsSelector from "./variants-selector";
 import {
-  mapPizzaType,
   PizzaSize,
-  pizzaSizes,
   PizzaType,
   pizzaTypes,
 } from "@/shared/constants/pizza";
-import { ProductWithRelations } from "@/@types/prisma";
-import { Ingredient as IngredientType } from "@prisma/client";
+import { Ingredient as IngredientType, Variants } from "@prisma/client";
 import Ingredient from "./ingredient";
-import { useSet } from "react-use";
+import { useFindAvailableSize } from "@/shared/hooks/use-find-available-size";
+import { getPizzaDetails } from "@/shared/lib/get-pizza-details";
 
 interface IChoosePizzaFormProps {
   imageUrl: string;
   name: string;
   className?: string;
   ingredients: IngredientType[];
-  items?: any[];
-  onClickAdd?: VoidFunction;
+  items: Variants[];
+  onClickAddCart?: VoidFunction;
+  id: number;
 }
 
 const ChoosePizzaForm: React.FunctionComponent<IChoosePizzaFormProps> = ({
@@ -32,16 +31,37 @@ const ChoosePizzaForm: React.FunctionComponent<IChoosePizzaFormProps> = ({
   name,
   ingredients,
   items,
-  onClickAdd,
+  onClickAddCart,
+  id,
 }) => {
-  const [size, setSize] = React.useState<PizzaSize>(20);
-  const [type, setType] = React.useState<PizzaType>(1);
+  const {
+    size,
+    type,
+    setSize,
+    setType,
+    selectedIngredients,
+    toggleIngredients,
+    availablePizzaSizes,
+  } = useFindAvailableSize(items);
 
-  const [selectedIngredients, {toggle: toggleIngredients}] = useSet(new Set<number>([]))
+  const { totalPrice, textDetails } = getPizzaDetails(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients
+  );
 
-  // TEMP DATA
-  const textDetails = "30 см, традиционное тесто 30, 590 г";
-  const totalPrice = 590;
+  const handleClickAdd = () => {
+    onClickAddCart?.();
+    console.log({
+      size,
+      type,
+      ingredients: selectedIngredients,
+      id,
+    });
+  };
+
   return (
     <div className={cn(className, "flex flex-1")}>
       <ProductImage src={imageUrl} alt={name} size={size} />
@@ -55,7 +75,7 @@ const ChoosePizzaForm: React.FunctionComponent<IChoosePizzaFormProps> = ({
             <VariantsSelector
               selectedValue={String(size)}
               onClick={(value) => setSize(Number(value) as PizzaSize)}
-              items={pizzaSizes}
+              items={availablePizzaSizes}
             />
 
             <VariantsSelector
@@ -76,7 +96,10 @@ const ChoosePizzaForm: React.FunctionComponent<IChoosePizzaFormProps> = ({
             ))}
           </div>
 
-          <Button className="h-[55px] px-10 text-base rounded-[18px] w-full block mt-5">
+          <Button
+            onClick={handleClickAdd}
+            className="h-[55px] px-10 text-base rounded-[18px] w-full block mt-5"
+          >
             Добавить в корзину за {totalPrice} ₽
           </Button>
         </div>

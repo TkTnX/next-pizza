@@ -26,6 +26,7 @@ const ChooseProductModal: React.FunctionComponent<IChooseProductModalProps> = ({
             name={product.name}
             ingredients={product.ingredient}
             items={product.variants}
+            id={product.id}
           />
         ) : (
           <ChooseProductForm imageUrl={product.imageUrl} name={product.name} />
