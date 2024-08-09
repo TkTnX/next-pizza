@@ -3,8 +3,6 @@ import { Api } from "../services/api-client";
 import { getCartDetails, ICartItem } from "../lib/get-cart-details";
 import { CartItemDTO } from "../services/dto/cart.dto";
 
-
-
 interface CartInterface {
   loading: boolean;
   error: boolean;
@@ -34,9 +32,10 @@ export const useCartStore = create<CartInterface>((set) => ({
     try {
       set({ loading: true, error: false });
       const data = await Api.cart.getCart();
-        set(getCartDetails(data));
-        set({items: data.cartItems})
-        return data
+
+      set(getCartDetails(data));
+      set({ items: data.cartItems });
+      return data;
     } catch (error) {
       console.log(error);
       set({ error: true });
@@ -44,7 +43,20 @@ export const useCartStore = create<CartInterface>((set) => ({
       set({ loading: false });
     }
   },
-  updateItemQuantity: async (id: number, quantity: number) => {},
+  updateItemQuantity: async (id: number, quantity: number) => {
+    try {
+      set({ loading: true, error: false });
+      const data = await Api.cart.updateItemQuantity(id, quantity);
+
+      set(getCartDetails(data));
+      set({ items: data.cartItems });
+    } catch (error) {
+      console.log(error);
+      set({ error: true });
+    } finally {
+      set({ loading: false });
+    }
+  },
   addCartItem: async (values: any) => {},
   removeCartItem: async (id: number) => {},
 }));

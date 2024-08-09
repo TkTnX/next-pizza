@@ -21,18 +21,28 @@ interface ICartDrawerProps {}
 const CartDrawer: React.FunctionComponent<
   React.PropsWithChildren<ICartDrawerProps>
 > = ({ children }) => {
-  const [totalPrice, fetchCartItems, items] = useCartStore((state) => [
-    state.totalPrice,
-    state.fetchCartItems,
-    state.items,
-  ]);
+  const [totalPrice, fetchCartItems, updateItemQuantity, items] = useCartStore(
+    (state) => [
+      state.totalPrice,
+      state.fetchCartItems,
+      state.updateItemQuantity,
+      state.items,
+    ]
+  );
 
-  
   React.useEffect(() => {
     fetchCartItems();
   }, []);
 
+  const onClickCountButton = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus"
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
 
+    updateItemQuantity(id, newQuantity);
+  };
 
   return (
     <Sheet>
@@ -40,7 +50,7 @@ const CartDrawer: React.FunctionComponent<
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
         <SheetHeader>
           <SheetTitle>
-            В корзине <span className="font-bold">3 товара</span>
+            В корзине <span className="font-bold">{items.length} товара</span>
           </SheetTitle>
         </SheetHeader>
 
@@ -52,7 +62,7 @@ const CartDrawer: React.FunctionComponent<
                 id={item.id}
                 imageUrl={item.productItem.imageUrl}
                 name={item.productItem.name}
-                price={123}
+                price={item.productItem.variants[0].price}
                 quantity={item.quantity}
                 details={
                   item.productItem.size && item.productItem.pizzaType
@@ -62,6 +72,9 @@ const CartDrawer: React.FunctionComponent<
                         item.pizzaSize as PizzaSize
                       )
                     : ""
+                }
+                onClickCountButton={(type) =>
+                  onClickCountButton(item.id, item.quantity, type)
                 }
               />
             </div>
